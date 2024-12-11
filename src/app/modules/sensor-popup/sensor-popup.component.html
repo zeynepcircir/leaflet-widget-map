@@ -1,1 +1,156 @@
-<p>sensor-popup works!</p>
+<div class="flex flex-col gap-2 bg-white h-[155px]">
+    <div class="relative flex justify-between">
+        <div class="flex flex-col gap-1">
+            @switch (popupState) {
+                @case (PopupState.INFORMATION) {
+                    <span class="font-medium text-black"
+                        >Sıcaklık ve Nem Sensörü</span
+                    >
+                }
+                @case (PopupState.TEMPERATURE) {
+                    <span class="font-medium text-primary-dark"
+                        ><b>Sıcaklık</b> Sensörü</span
+                    >
+                }
+                @case (PopupState.HUMIDITY) {
+                    <span class="font-medium text-primary-dark"
+                        ><b>Nem</b> Sensörü</span
+                    >
+                }
+            }
+            <span class="text-black/50">{{ sensor.name }}</span>
+        </div>
+        <img
+            (click)="closePopup()"
+            class="absolute -right-8 -top-10 cursor-pointer"
+            src="assets/icons/map-pin.svg"
+            alt="map pin"
+        />
+    </div>
+    @switch (popupState) {
+        @case (PopupState.INFORMATION) {
+            <div
+                class="grid grid-cols-9 grid-rows-4 h-full items-center text-base text-nowrap"
+            >
+                <img
+                    class="col-span-1 row-span-2 pr-2"
+                    src="assets/icons/temperature.svg"
+                    alt="temperature"
+                />
+                <span class="col-span-3 row-span-2 font-medium"
+                    >{{ sensor.temperature() }} °C</span
+                >
+                <button
+                    (click)="setPage(PopupState.TEMPERATURE)"
+                    class="col-span-5 row-span-2 rounded whitespace-nowrap shadow-lg px-4 py-2 bg-primary-light text-base text-primary-dark"
+                >
+                    <b>Sıcaklık</b> Ayarla
+                </button>
+                <img
+                    class="col-span-1 row-span-2 pr-2"
+                    src="assets/icons/humidity.svg"
+                    alt="temperature"
+                />
+                <span class="col-span-3 row-span-2 font-medium"
+                    >% {{ sensor.humidity() }}</span
+                >
+                <button
+                    (click)="setPage(PopupState.HUMIDITY)"
+                    class="col-span-5 row-span-2 rounded whitespace-nowrap shadow-lg px-4 py-2 bg-primary-light text-center text-base text-primary-dark"
+                >
+                    <b>Nem</b> Ayarla
+                </button>
+            </div>
+        }
+        @case (PopupState.TEMPERATURE) {
+            <div class="grid grid-cols-2 grid-rows-5 gap-2">
+                <span
+                    class="col-span-1 row-span-1 text-start items-center font-medium"
+                    >Mevcut</span
+                >
+                <span
+                    class="col-span-1 row-span-1 text-start items-center font-medium"
+                    >Yeni</span
+                >
+                <div class="col-span-1 row-span-2 flex items-center gap-2">
+                    <img src="assets/icons/temperature.svg" alt="temperature" />
+                    <span>{{ sensor.temperature() }} °C</span>
+                </div>
+
+                <div class="relative col-span-1 row-span-2">
+                    <div
+                        class="absolute inset-y-0 -top-1 end-2 flex items-center ps-1 pointer-events-none text-black font-bold"
+                    >
+                        °C
+                    </div>
+                    <input
+                        (input)="temperatureChange($event)"
+                        type="number"
+                        min="-273.17"
+                        max="100"
+                        class="bg-white border border-gray text-black text-sm rounded-lg focus:ring-primary focus:border-primary block w-full ps-2 p-2 px-4"
+                        placeholder=""
+                    />
+                </div>
+
+                <button
+                    (click)="cancel()"
+                    class="col-span-1 row-span-2 h-3/4 flex items-center justify-center text-center border border-primary rounded-lg text-primary px-4 py-2"
+                >
+                    İptal et
+                </button>
+                <button
+                    (click)="updateTemperature()"
+                    class="col-span-1 row-span-2 h-3/4 flex items-center justify-center text-center bg-primary text-white rounded-lg px-4 py-2"
+                >
+                    Güncelle
+                </button>
+            </div>
+        }
+        @case (PopupState.HUMIDITY) {
+            <div class="grid grid-cols-2 grid-rows-5 gap-2">
+                <span
+                    class="col-span-1 row-span-1 text-start items-center font-medium"
+                    >Mevcut</span
+                >
+                <span
+                    class="col-span-1 row-span-1 text-start items-center font-medium"
+                    >Yeni</span
+                >
+                <div class="col-span-1 row-span-2 flex items-center gap-2">
+                    <img src="assets/icons/temperature.svg" alt="temperature" />
+                    <span>{{ sensor.humidity() }} °C</span>
+                </div>
+
+                <div class="relative col-span-1 row-span-2">
+                    <div
+                        class="absolute inset-y-0 -top-1 start-2 flex items-center ps-1 pointer-events-none text-black font-bold"
+                    >
+                        %
+                    </div>
+                    <input
+                        (input)="humidityChange($event)"
+                        type="number"
+                        min="0"
+                        max="100"
+                        class="bg-white border border-gray text-black text-sm rounded-lg focus:ring-primary focus:border-primary block w-full ps-7 p-2 px-4"
+                        placeholder=""
+                    />
+                </div>
+
+                <button
+                    (click)="cancel()"
+                    class="col-span-1 row-span-2 h-3/4 flex items-center justify-center border border-primary rounded-lg text-primary px-4 py-2"
+                >
+                    İptal et
+                </button>
+                <button
+                    (click)="updateHumidity()"
+                    class="col-span-1 row-span-2 h-3/4 flex items-center justify-center bg-primary text-white rounded-lg px-4 py-2"
+                >
+                    Güncelle
+                </button>
+            </div>
+        }
+    }
+</div>
