@@ -1,24 +1,19 @@
-import {
-  Component,
-  ElementRef,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { Sensor } from '../../types/sensor.type';
 import { Subject, takeUntil } from 'rxjs';
 import { BaseDataService } from '../../services/base-data.service';
 import { SensorWidgetComponent } from '../../../modules/sensor-widget/sensor-widget.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+
 @Component({
   selector: 'app-sensor-dashboard',
   standalone: true,
   imports: [FormsModule, SensorWidgetComponent, CommonModule],
   templateUrl: './sensor-dashboard.component.html',
-  styleUrl: './sensor-dashboard.component.css'
+  styleUrl: './sensor-dashboard.component.css',
 })
-export class SensorDashboardComponent {
+export class DevicesComponent implements OnInit, OnDestroy {
   private unsub$: Subject<void> = new Subject<void>();
   private sensors: Sensor[] = [];
   public filteredSensors: Sensor[] = [];
@@ -70,5 +65,3 @@ export class SensorDashboardComponent {
       this.unsub$.next();
   }
 }
-
-
