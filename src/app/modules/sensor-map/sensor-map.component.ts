@@ -1,16 +1,15 @@
 import {
-  AfterViewInit,
-  ComponentRef,
-  Component,
-  ElementRef,
-  inject,
   OnInit,
   ViewChild,
   ViewContainerRef,
+  ComponentRef,
+  Component,
+  ElementRef
 } from '@angular/core';
 import * as Leaflet from 'leaflet';
 
 import { SensorPopupComponent } from '../../modules/sensor-popup/sensor-popup.component';
+import { BaseDataService } from '../../shared/services/base-data.service';
 import { Sensor } from '../../shared/types/sensor.type';
 
 @Component({
@@ -25,12 +24,12 @@ export class SensorMapComponent implements OnInit {
   private icon!: Leaflet.Icon;
   private layer!: Leaflet.TileLayer;
 
-  // Dinamik URL ve Atıf Bilgisi
   private readonly TILE_LAYER_URL: string = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
   private readonly TILE_LAYER_ATTRIBUTION: string = '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> Zeynep Çırçır';
 
   constructor(
-    private viewContainerRef: ViewContainerRef
+    private viewContainerRef: ViewContainerRef,
+    private dataService: BaseDataService
   ) {
     this.initializeAssets();
   }
@@ -40,7 +39,11 @@ export class SensorMapComponent implements OnInit {
       .setView([39, 34], 5)
       .addLayer(this.layer);
 
-   
+    this.dataService.getSensorData().subscribe((data: Sensor[]) => {
+      data.forEach((sensor) => {
+        this.renderMarker(sensor);
+      });
+    });
   }
 
   renderMarker(sensor: Sensor) {
@@ -51,6 +54,27 @@ export class SensorMapComponent implements OnInit {
     let popupComponent: ComponentRef<SensorPopupComponent> =
       this.viewContainerRef.createComponent(SensorPopupComponent);
     popupComponent.instance.sensor = sensor;
+
+    marker.on('popupopen', () => {
+      this.dataService.selectSensor(sensor.id);
+    });
+
+    marker.on('popupclose', () => {
+      this.dataService.unselectSensor(sensor.id);
+    });
+
+    this.dataService.selectedSensorId$.subscribe((id) => {
+      if (id === sensor.id) {
+        this.map.flyTo([sensor.latitude, sensor.longitude], 12, { animate: true });
+        marker.openPopup();
+      }
+    });
+
+    this.dataService.unSelectedSensorId$.subscribe((id) => {
+      if (id === sensor.id) {
+        marker.closePopup();
+      }
+    });
 
     marker
       .bindPopup(popupComponent.location.nativeElement, {

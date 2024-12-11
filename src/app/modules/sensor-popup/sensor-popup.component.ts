@@ -1,6 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Sensor } from '../../shared/types/sensor.type';
 import { FormsModule } from '@angular/forms';
+import { BaseDataService } from '../../shared/services/base-data.service';
 
 @Component({
     selector: 'app-sensor-popup',
@@ -18,7 +19,7 @@ export class SensorPopupComponent implements OnInit {
     private newTemperature?: number;
     private newHumidity?: number;
 
-    constructor() {}
+    constructor(private dataService: BaseDataService) {}
 
     ngOnInit(): void {
         this.sensor.isSelected.set(false);
@@ -58,6 +59,7 @@ export class SensorPopupComponent implements OnInit {
     }
 
     closePopup() {
+        this.dataService.unSelectedSensorId$.next(this.sensor.id);
     }
 
     cancel() {

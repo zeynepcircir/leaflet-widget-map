@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Sensor } from '../../shared/types/sensor.type';
 import { CommonModule } from '@angular/common';
+import { BaseDataService } from '../../shared/services/base-data.service';
 
 @Component({
     selector: 'app-sensor-widget',
@@ -12,8 +13,9 @@ import { CommonModule } from '@angular/common';
 export class SensorWidgetComponent {
     @Input() sensor!: Sensor;
 
-    constructor() {}
+    constructor(private dataService: BaseDataService) {}
 
     selectSensor() {
+        this.dataService.selectSensor(this.sensor.id);
     }
 }
