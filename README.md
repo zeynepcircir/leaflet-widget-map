@@ -1,3 +1,25 @@
+ <img src="https://github.com/zeynepcircir/leaflet-widget-map/blob/master/src/assets/image/screenshot.png" alt="Image 3" width="1000">
+
+# Leaflet Widget Map
+
+This project is a dynamic sensor and signal management application built using **Angular 19**. The application integrates with the **Leaflet.js** library to provide an interactive map interface for visualizing and managing sensor data and signals.
+
+## Features
+- Real-time signal updates for sensors displayed on a Leaflet map.
+- Interactive widgets for updating temperature and humidity values with validation.
+- Responsive UI for managing sensor data through popups.
+- Seamless state management using `PopupState`.
+- TailwindCSS for clean and responsive styling.
+
+## Technologies Used
+- **Angular 19**: Framework for building the application.
+- **TypeScript**: For type-safe, maintainable code.
+- **Leaflet.js**: For rendering interactive maps.
+- **TailwindCSS**: For modern and responsive UI design.
+- **RxJS**: For managing real-time data streams and state.
+- **HTML5/CSS3**: For building a structured and styled UI.
+
+
 # LeafletWidgetMap
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.4.
