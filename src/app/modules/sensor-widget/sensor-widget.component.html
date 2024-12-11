@@ -1,33 +1,30 @@
-<div
-    (click)="selectSensor()"
-    [ngClass]="sensor.isSelected() ? 'border-primary' : 'border-transparent'"
-    class="flex flex-col gap-3 h-fit border-2 rounded-2xl p-4 px-6 pb-6 bg-primary-light cursor-pointer"
->
-    <div class="flex items-center justify-between py-2">
-        <div class="flex flex-col">
-            <span class="font-semibold text-black text-[16px]"
-                >Sıcaklık ve Nem Sensörü</span
-            >
-            <span class="text-black/50 text-base">{{ sensor.name }}</span>
+<div (click)="selectSensor()" [ngClass]="sensor.isSelected() ? 'border-primary' : 'border-transparent'"
+    class="flex flex-col gap-3 h-fit border-2 rounded-2xl p-4 px-6 pb-6 bg-primary-light cursor-pointer">
+    <div class="d-flex align-items-center justify-content-between py-2">
+        <div class="d-flex flex-column">
+            <span class="fw-semibold text-dark fs-6">Sıcaklık ve Nem Sensörü</span>
+            <span class="text-muted fs-6">{{ sensor.name }}</span>
         </div>
-        @if (sensor.battery < 20) {
+        <ng-container *ngIf="sensor.battery < 20">
             <img src="assets/icons/low-battery.svg" alt="battery" />
-        } @else if (sensor.battery < 60) {
+        </ng-container>
+        <ng-container *ngIf="sensor.battery >= 20 && sensor.battery < 60">
             <img src="assets/icons/mid-battery.svg" alt="battery" />
-        } @else {
+        </ng-container>
+        <ng-container *ngIf="sensor.battery >= 60">
             <img src="assets/icons/high-battery.svg" alt="battery" />
-        }
+        </ng-container>
     </div>
 
-    <div class="flex items-center gap-2">
+    <div class="d-flex align-items-center gap-2">
         <img src="assets/icons/temperature.svg" alt="temperature" />
-        <span class="text-lg">{{ sensor.temperature() }} °C</span>
+        <span class="fs-6">{{ sensor.temperature() }} °C</span>
         <img src="assets/icons/humidity.svg" alt="temperature" />
-        <span class="text-lg">% {{ sensor.humidity() }}</span>
+        <span class="fs-6">% {{ sensor.humidity() }}</span>
     </div>
 
-    <div class="flex items-center justify-between">
-        <span class="text-xs pt-1">{{ sensor.date }}</span>
+    <div class="d-flex align-items-center justify-content-between">
+        <span class="fs-7 pt-1">{{ sensor.date | datePipe }}</span>
         <img src="assets/icons/temperature-solid.svg" alt="" />
     </div>
 </div>

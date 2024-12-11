@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, importProvidersFrom } from '@angular/core';
 import { SensorMapComponent } from '../../modules/sensor-map/sensor-map.component';
-import { DevicesComponent } from '../../shared/devices/devices.component';
+import { SensorDashboardComponent } from '../../shared/dashboard/sensor-dashboard/sensor-dashboard.component';
+
 @Component({
   selector: 'app-main',
-  imports: [SensorMapComponent, DevicesComponent],
+  imports: [SensorMapComponent, SensorDashboardComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css'
 })

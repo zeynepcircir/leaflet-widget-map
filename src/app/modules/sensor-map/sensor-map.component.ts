@@ -20,18 +20,18 @@ import { Sensor } from '../../shared/types/sensor.type';
 })
 export class SensorMapComponent implements OnInit {
   @ViewChild('mapContainer', { static: true }) mapContainer!: ElementRef;
-  private map!: Leaflet.Map;
   private icon!: Leaflet.Icon;
   private layer!: Leaflet.TileLayer;
+  private map!: Leaflet.Map;
 
   private readonly TILE_LAYER_URL: string = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-  private readonly TILE_LAYER_ATTRIBUTION: string = '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> Zeynep Çırçır';
+  private readonly TILE_LAYER_ATTRIBUTION: string = '&copy; <a href="https://www.openstreetmap.org/">Map data 2024 Google, INEGI</a> | Keyboard shortcuts | 500 km | Terms';
 
   constructor(
     private viewContainerRef: ViewContainerRef,
     private dataService: BaseDataService
   ) {
-    this.initializeAssets();
+    this.fetchAssets();
   }
 
   ngOnInit(): void {
@@ -86,7 +86,7 @@ export class SensorMapComponent implements OnInit {
       .closePopup();
   }
 
-  initializeAssets() {
+  fetchAssets() {
     this.icon = Leaflet.icon({
       iconUrl: 'assets/icons/map-pin.svg',
       iconAnchor: [18, 56],

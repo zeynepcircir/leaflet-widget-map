@@ -4,71 +4,70 @@ import { FormsModule } from '@angular/forms';
 import { BaseDataService } from '../../shared/services/base-data.service';
 
 @Component({
-    selector: 'app-sensor-popup',
-    standalone: true,
-    imports: [FormsModule],
-    templateUrl: './sensor-popup.component.html',
-    styleUrl: './sensor-popup.component.css',
+  selector: 'app-sensor-popup',
+  standalone: true,
+  imports: [FormsModule],
+  templateUrl: './sensor-popup.component.html',
+  styleUrl: './sensor-popup.component.css',
 })
 export class SensorPopupComponent implements OnInit {
-    @Input() sensor!: Sensor;
+  @Input() sensor!: Sensor;
+  private newTemperature?: number;
+  private newHumidity?: number;
+  protected PopupState = PopupState;
+  protected popupState: PopupState = PopupState.INFORMATION;
 
-    protected PopupState = PopupState;
-    protected popupState: PopupState = PopupState.INFORMATION;
+  constructor(private dataService: BaseDataService) { }
 
-    private newTemperature?: number;
-    private newHumidity?: number;
+  ngOnInit(): void {
+    this.sensor.isSelected.set(false);
+  }
 
-    constructor(private dataService: BaseDataService) {}
+  humidity(e: Event) {
+    const inputEl = e.target as HTMLInputElement;
+    const val = Number(inputEl.value);
+    this.newHumidity = val;
+  }
 
-    ngOnInit(): void {
-        this.sensor.isSelected.set(false);
-    }
-    temperatureChange(e: Event) {
-        const inputEl = e.target as HTMLInputElement;
-        const val = Number(inputEl.value);
-        this.newTemperature = val;
-    }
+  updateHumidity() {
+    if (!this.newHumidity || this.newHumidity < 0 || this.newHumidity > 100)
+      return;
+    this.sensor.humidity.set(this.newHumidity);
+    this.navigateToPage(PopupState.INFORMATION);
+  }
 
-    updateTemperature() {
-        if (
-            !this.newTemperature ||
-            this.newTemperature < -273.17 ||
-            this.newTemperature > 100
-        )
-            return;
-        this.sensor.temperature.set(this.newTemperature);
-        this.setPage(PopupState.INFORMATION);
-    }
+  temperature(e: Event) {
+    const inputEl = e.target as HTMLInputElement;
+    const val = Number(inputEl.value);
+    this.newTemperature = val;
+  }
 
-    humidityChange(e: Event) {
-        const inputEl = e.target as HTMLInputElement;
-        const val = Number(inputEl.value);
-        this.newHumidity = val;
-    }
+  updateTemperature() {
+    if (
+      !this.newTemperature ||
+      this.newTemperature < -273.17 ||
+      this.newTemperature > 100
+    )
+      return;
+    this.sensor.temperature.set(this.newTemperature);
+    this.navigateToPage(PopupState.INFORMATION);
+  }
 
-    updateHumidity() {
-        if (!this.newHumidity || this.newHumidity < 0 || this.newHumidity > 100)
-            return;
-        this.sensor.humidity.set(this.newHumidity);
-        this.setPage(PopupState.INFORMATION);
-    }
+  navigateToPage(state: PopupState) {
+    this.popupState = state;
+  }
 
-    setPage(state: PopupState) {
-        this.popupState = state;
-    }
+  closePopup() {
+    this.dataService.unSelectedSensorId$.next(this.sensor.id);
+  }
 
-    closePopup() {
-        this.dataService.unSelectedSensorId$.next(this.sensor.id);
-    }
-
-    cancel() {
-        this.setPage(PopupState.INFORMATION);
-    }
+  cancel() {
+    this.navigateToPage(PopupState.INFORMATION);
+  }
 }
 
 enum PopupState {
-    INFORMATION,
-    TEMPERATURE,
-    HUMIDITY,
+  TEMPERATURE,
+  HUMIDITY,
+  INFORMATION,
 }

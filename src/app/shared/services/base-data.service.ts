@@ -3,13 +3,13 @@ import { Sensor } from '../types/sensor.type';
 import { Observable, Subject } from 'rxjs';
 
 @Injectable({
-    providedIn: 'root',
+  providedIn: 'root',
 })
 export abstract class BaseDataService {
-    constructor() {}
-    abstract selectedSensorId$: Subject<string>;
-    abstract unSelectedSensorId$: Subject<string>;
-    abstract getSensorData(): Observable<Sensor[]>;
-    abstract selectSensor(id: string): void;
-    abstract unselectSensor(id: string): void;
+  constructor() { }
+  abstract getSensorData(): Observable<Sensor[]>;
+  abstract selectSensor(id: string): void;
+  abstract unselectSensor(id: string): void;
+  abstract selectedSensorId$: Subject<string>;
+  abstract unSelectedSensorId$: Subject<string>;
 }

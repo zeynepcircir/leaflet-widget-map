@@ -3,11 +3,11 @@ import { WritableSignal } from '@angular/core';
 export type Sensor = {
     id: string;
     name: string;
-    isSelected: WritableSignal<boolean>;
     temperature: WritableSignal<number>;
     humidity: WritableSignal<number>;
-    latitude: number;
-    longitude: number;
+    isSelected: WritableSignal<boolean>;
     battery: number;
     date: Date;
+    latitude: number;
+    longitude: number;
 };
